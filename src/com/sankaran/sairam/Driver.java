@@ -21,7 +21,7 @@ public class Driver {
         final String COMMAND_LIST       = "LIST";
 
         OperatingSystem os = new OperatingSystem();
-        DependencyList dependencyList = os.getDependencyList();
+        //DependencyList dependencyList = os.getDependencyList();
 
         String inputFile = "input.txt";
         URL url = Driver.class.getResource(inputFile);
@@ -47,10 +47,10 @@ public class Driver {
                 } if (command.toUpperCase().equals(COMMAND_DEPEND)) {
                     Software software = new Software(name);
                     for (int i = 2; i < commands.length; i++) {
-                        dependencyList.addDependency(software, new Software(commands[i]));
+                        os.addDependency(software, new Software(commands[i]));
                     }
                 } else {
-                    System.out.println("Invalid command!");
+                    //System.out.println("Invalid command!");
                 }
             }
         } catch (FileNotFoundException fe) {

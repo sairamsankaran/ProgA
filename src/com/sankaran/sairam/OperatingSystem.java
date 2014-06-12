@@ -19,6 +19,10 @@ public class OperatingSystem {
         return dependencyList;
     }
 
+    public void addDependency(Software software, Software dependency) {
+        dependencyList.addDependency(software, dependency);
+    }
+
     public Map<Software, String> getInstalledSoftwares() {
         return installedSoftwares;
     }
