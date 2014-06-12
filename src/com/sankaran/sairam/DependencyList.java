@@ -17,6 +17,10 @@ public class DependencyList {
 
     }
 
+    public Map<Software, List<Software>> getDependencyList() {
+        return dependencyList;
+    }
+
     public void addDependency(Software software, Software dependency) {
         if(dependencyList.get(software) == null) {
             dependencyList.put(software, new ArrayList<Software>());

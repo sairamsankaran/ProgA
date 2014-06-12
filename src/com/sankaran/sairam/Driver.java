@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -38,15 +39,11 @@ public class Driver {
                 }
                 System.out.println(line);
                 if (command.toUpperCase().equals(COMMAND_LIST)) {
-                    Set<Software> installedSoftwares = os.getInstalledSoftwares();
-                    Iterator<Software> iterator = installedSoftwares.iterator();
-                    while (iterator.hasNext()) {
-                        System.out.println(iterator.next().getName().toUpperCase());
-                    }
+                    os.printInstalledSoftwares();
                 } if (command.toUpperCase().equals(COMMAND_INSTALL)) {
-
+                    os.install(name);
                 } if (command.toUpperCase().equals(COMMAND_REMOVE)) {
-
+                    os.remove(name);
                 } if (command.toUpperCase().equals(COMMAND_DEPEND)) {
                     Software software = new Software(name);
                     for (int i = 2; i < commands.length; i++) {

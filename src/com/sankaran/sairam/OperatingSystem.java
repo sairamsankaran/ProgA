@@ -19,16 +19,48 @@ public class OperatingSystem {
         return dependencyList;
     }
 
-    public Set<Software> getInstalledSoftwares() {
-        return installedSoftwares.keySet();
+    public Map<Software, String> getInstalledSoftwares() {
+        return installedSoftwares;
     }
 
-    public boolean install(String name) {
+    public void install(String name) {
         Software software = new Software(name);
-        return true;
+        if (Boolean.valueOf(installedSoftwares.get(software))) {
+            // already installed
+            System.out.println(name + " is already installed.");
+        } else {
+            // check if dependencies are installed
+            List<Software> requiredList = dependencyList.getDependencyList().get(software);
+            for (Software required : requiredList) {
+                if (Boolean.valueOf(installedSoftwares.get(required))) {
+                    continue;
+                } else {
+                    install(required.getName());
+                }
+            }
+            System.out.println("Installing " + software.getName());
+            installedSoftwares.put(software, "1");
+        }
     }
 
-    public boolean remove(String name) {
-        return true;
+    public void printInstalledSoftwares() {
+        Iterator<Software> iterator = installedSoftwares.keySet().iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next().getName().toUpperCase());
+        }
+    }
+
+    public void remove(String name) {
+        Software software = new Software(name);
+        Iterator<Software> iterator = dependencyList.getDependencyList().keySet().iterator();
+        while (iterator.hasNext()) {
+            List<Software> requiredList = dependencyList.getDependencyList().get(iterator.next());
+            if (requiredList.indexOf(software) >= 0) {
+                System.out.println(name + " is still needed.");
+                return;
+            }
+        }
+        installedSoftwares.remove(software);
+        return;
     }
 }
