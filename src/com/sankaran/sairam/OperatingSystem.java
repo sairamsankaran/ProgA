@@ -31,11 +31,13 @@ public class OperatingSystem {
         } else {
             // check if dependencies are installed
             List<Software> requiredList = dependencyList.getDependencyList().get(software);
-            for (Software required : requiredList) {
-                if (Boolean.valueOf(installedSoftwares.get(required))) {
-                    continue;
-                } else {
-                    install(required.getName());
+            if (requiredList != null) {
+                for (Software required : requiredList) {
+                    if (Boolean.valueOf(installedSoftwares.get(required))) {
+                        continue;
+                    } else {
+                        install(required.getName());
+                    }
                 }
             }
             System.out.println("Installing " + software.getName());
