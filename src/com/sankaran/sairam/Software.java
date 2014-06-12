@@ -39,4 +39,10 @@ public class Software {
     public void addDependency(Software dependency) {
         this.dependencies.add(dependency);
     }*/
+
+    public boolean equals(Object o) {
+        if ((o instanceof Software) && ((Software) o).getName().equalsIgnoreCase(name))
+            return true;
+        return false;
+    }
 }
