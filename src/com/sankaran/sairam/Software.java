@@ -10,7 +10,6 @@ import java.util.List;
  */
 public class Software {
     private String name = null;
-    //private List<Software> dependencies = new ArrayList<Software>();
 
     public Software () {
 
@@ -24,25 +23,17 @@ public class Software {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /*public List<Software> getDependencies() {
-        return dependencies;
-    }
-
-    public void setDependencies(List<Software> dependencies) {
-        this.dependencies = dependencies;
-    }
-
-    public void addDependency(Software dependency) {
-        this.dependencies.add(dependency);
-    }*/
-
+    @Override
     public boolean equals(Object o) {
-        if ((o instanceof Software) && ((Software) o).getName().equalsIgnoreCase(name))
+        if ((o instanceof Software) && ((Software) o).getName().equalsIgnoreCase(name)) {
             return true;
-        return false;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 }

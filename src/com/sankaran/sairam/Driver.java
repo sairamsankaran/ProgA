@@ -31,13 +31,17 @@ public class Driver {
         try {
             br = new BufferedReader(new FileReader(url.getPath()));
             while (((line = br.readLine()) != null) && (!line.toUpperCase().equals(COMMAND_END))){
+                System.out.println(line);
                 String [] commands = line.split(delimiter);
                 String command = commands[0]; // first split is always a command
                 String name = "";
                 if (commands.length > 1) {
                     name = commands[1]; // second split is always a software name except LIST and END
+                    if (name == null || name.length() < 1) {
+                        System.out.println("Invalid name!");
+                        continue;
+                    }
                 }
-                System.out.println(line);
                 if (command.toUpperCase().equals(COMMAND_LIST)) {
                     os.printInstalledSoftwares();
                 } if (command.toUpperCase().equals(COMMAND_INSTALL)) {

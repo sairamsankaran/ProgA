@@ -8,49 +8,43 @@ import java.util.*;
  * can be installed
  */
 public class OperatingSystem {
-    private Map<Software, String> installedSoftwares = new HashMap<Software, String>();
+    private Set<Software> installedSoftwares = new HashSet<Software>();
     private DependencyList dependencyList = new DependencyList();
 
     public OperatingSystem() {
 
     }
 
-    public DependencyList getDependencyList() {
-        return dependencyList;
-    }
-
     public void addDependency(Software software, Software dependency) {
         dependencyList.addDependency(software, dependency);
     }
 
-    public Map<Software, String> getInstalledSoftwares() {
-        return installedSoftwares;
-    }
-
     public void install(String name) {
         Software software = new Software(name);
-        if (Boolean.valueOf(installedSoftwares.get(software))) {
+        if (installedSoftwares.contains(software)) {
             // already installed
             System.out.println(name + " is already installed.");
+            return;
         } else {
             // check if dependencies are installed
             List<Software> requiredList = dependencyList.getDependencyList().get(software);
             if (requiredList != null) {
                 for (Software required : requiredList) {
-                    if (Boolean.valueOf(installedSoftwares.get(required))) {
+                    if (installedSoftwares.contains(software)) {
                         continue;
                     } else {
                         install(required.getName());
                     }
                 }
             }
-            System.out.println("Installing " + software.getName());
-            installedSoftwares.put(software, "1");
+            System.out.println("Installing " + software.getName() + ".");
+            installedSoftwares.add(software);
+            return;
         }
     }
 
     public void printInstalledSoftwares() {
-        Iterator<Software> iterator = installedSoftwares.keySet().iterator();
+        Iterator<Software> iterator = installedSoftwares.iterator();
         while (iterator.hasNext()) {
             System.out.println(iterator.next().getName().toUpperCase());
         }
@@ -58,15 +52,38 @@ public class OperatingSystem {
 
     public void remove(String name) {
         Software software = new Software(name);
-        Iterator<Software> iterator = dependencyList.getDependencyList().keySet().iterator();
-        while (iterator.hasNext()) {
-            List<Software> requiredList = dependencyList.getDependencyList().get(iterator.next());
-            if (requiredList.indexOf(software) >= 0) {
-                System.out.println(name + " is still needed.");
+        List<Software> requiredList;
+        if (!installedSoftwares.contains(software)) {
+            System.out.println(name + " is not installed.");
+            return;
+        } else {
+            Iterator<Software> iterator = dependencyList.getDependencyList().keySet().iterator();
+            while (iterator.hasNext()) {
+                Software currentSoftware = iterator.next();
+                if (software.equals(currentSoftware)) { // dont check its own dependency list
+                    continue;
+                } else if(!installedSoftwares.contains(currentSoftware)) { // dont check  dependency list of software not installed
+                    continue;
+                } else {
+                    requiredList = dependencyList.getDependencyList().get(currentSoftware);
+                    if (requiredList.indexOf(software) >= 0) {
+                        System.out.println(name + " is still needed.");
+                        return;
+                    }
+                }
+            }
+            System.out.println("Removing " + software.getName() + ".");
+            installedSoftwares.remove(software);
+
+            // remove dependant software no more required
+            requiredList = dependencyList.getDependencyList().get(software);
+            if (requiredList != null) {
+                for (Software required : requiredList) {
+                    remove(required.getName());
+                }
+            } else {
                 return;
             }
         }
-        installedSoftwares.remove(software);
-        return;
     }
 }
